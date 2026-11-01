@@ -1,0 +1,93 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Trang-1" id="M6alfScWyk_kIomxrZvQ">
+    <mxGraphModel grid="1" page="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="7uPkXAtsU5es1uQ-42I1-26" edge="1" parent="1" source="7uPkXAtsU5es1uQ-42I1-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;defaultLabelBackgroundColor=page;entryX=0.505;entryY=-0.006;entryDx=0;entryDy=0;entryPerimeter=0;" target="7uPkXAtsU5es1uQ-42I1-7">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="430" y="220" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="7uPkXAtsU5es1uQ-42I1-1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;labelPosition=left;verticalLabelPosition=top;align=right;verticalAlign=bottom;" value="&lt;div&gt;&lt;br/&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="140" width="800" x="14" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="7uPkXAtsU5es1uQ-42I1-2" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="LoginForm&lt;div&gt;&lt;div&gt;Login, Roles&lt;/div&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="60" width="140" x="35" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="7uPkXAtsU5es1uQ-42I1-3" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="StudentForm&lt;br&gt;Profile, Search" vertex="1">
+          <mxGeometry height="60" width="140" x="185" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="7uPkXAtsU5es1uQ-42I1-4" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="CatalogForm&lt;br&gt;Faculty, Subject" vertex="1">
+          <mxGeometry height="60" width="140" x="335" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="7uPkXAtsU5es1uQ-42I1-5" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="EnrollForm&lt;br&gt;Register, Print" vertex="1">
+          <mxGeometry height="60" width="140" x="485" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="7uPkXAtsU5es1uQ-42I1-6" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="&lt;div&gt;FeeForm&lt;br&gt;Collect, Receipt&lt;/div&gt;" vertex="1">
+          <mxGeometry height="60" width="140" x="635" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="7uPkXAtsU5es1uQ-42I1-27" edge="1" parent="1" source="7uPkXAtsU5es1uQ-42I1-7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;defaultLabelBackgroundColor=page;" target="7uPkXAtsU5es1uQ-42I1-13" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="7uPkXAtsU5es1uQ-42I1-7" parent="1" style="rounded=0;whiteSpace=wrap;html=1;labelPosition=left;verticalLabelPosition=top;align=right;verticalAlign=bottom;" value="&lt;div&gt;&lt;br/&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="140" width="800" x="10" y="250" as="geometry" />
+        </mxCell>
+        <mxCell id="7uPkXAtsU5es1uQ-42I1-8" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="&lt;div&gt;AuthService&lt;/div&gt;&lt;div&gt;Auth, Roles&lt;/div&gt;" vertex="1">
+          <mxGeometry height="60" width="140" x="30" y="290" as="geometry" />
+        </mxCell>
+        <mxCell id="7uPkXAtsU5es1uQ-42I1-9" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="UserService&lt;br&gt;Student, Lecturer" vertex="1">
+          <mxGeometry height="60" width="140" x="180" y="290" as="geometry" />
+        </mxCell>
+        <mxCell id="7uPkXAtsU5es1uQ-42I1-10" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="CatalogService&lt;br&gt;Faculty, Subject" vertex="1">
+          <mxGeometry height="60" width="140" x="330" y="290" as="geometry" />
+        </mxCell>
+        <mxCell id="7uPkXAtsU5es1uQ-42I1-11" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="&lt;div&gt;EnrollService&lt;br&gt;Validation chain&lt;/div&gt;" vertex="1">
+          <mxGeometry height="60" width="140" x="480" y="290" as="geometry" />
+        </mxCell>
+        <mxCell id="7uPkXAtsU5es1uQ-42I1-12" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="FeeService&lt;br&gt;Debt, Refund" vertex="1">
+          <mxGeometry height="60" width="140" x="630" y="290" as="geometry" />
+        </mxCell>
+        <mxCell id="7uPkXAtsU5es1uQ-42I1-31" edge="1" parent="1" source="7uPkXAtsU5es1uQ-42I1-13" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;defaultLabelBackgroundColor=page;entryX=0.496;entryY=0.006;entryDx=0;entryDy=0;entryPerimeter=0;" target="7uPkXAtsU5es1uQ-42I1-19">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="7uPkXAtsU5es1uQ-42I1-13" parent="1" style="rounded=0;whiteSpace=wrap;html=1;labelPosition=left;verticalLabelPosition=top;align=right;verticalAlign=bottom;" value="&lt;div&gt;&lt;br/&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="140" width="800" x="10" y="490" as="geometry" />
+        </mxCell>
+        <mxCell id="7uPkXAtsU5es1uQ-42I1-14" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="&lt;div&gt;AccountRepo&lt;br&gt;Account, Role&lt;/div&gt;" vertex="1">
+          <mxGeometry height="60" width="140" x="30" y="530" as="geometry" />
+        </mxCell>
+        <mxCell id="7uPkXAtsU5es1uQ-42I1-15" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="&lt;div&gt;UserRepo&lt;br&gt;Student, Lecturer&lt;/div&gt;" vertex="1">
+          <mxGeometry height="60" width="140" x="180" y="530" as="geometry" />
+        </mxCell>
+        <mxCell id="7uPkXAtsU5es1uQ-42I1-16" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="CatalogRepo&lt;br&gt;Training Catalog" vertex="1">
+          <mxGeometry height="60" width="140" x="330" y="530" as="geometry" />
+        </mxCell>
+        <mxCell id="7uPkXAtsU5es1uQ-42I1-17" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="CourseRepo&lt;br&gt;Section, Enroll" vertex="1">
+          <mxGeometry height="60" width="140" x="480" y="530" as="geometry" />
+        </mxCell>
+        <mxCell id="7uPkXAtsU5es1uQ-42I1-18" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="PaymentRepo&lt;br&gt;Payment, debt" vertex="1">
+          <mxGeometry height="60" width="140" x="630" y="530" as="geometry" />
+        </mxCell>
+        <mxCell id="7uPkXAtsU5es1uQ-42I1-19" parent="1" style="rounded=0;whiteSpace=wrap;html=1;labelPosition=left;verticalLabelPosition=top;align=right;verticalAlign=bottom;" value="" vertex="1">
+          <mxGeometry height="140" width="800" x="14" y="690" as="geometry" />
+        </mxCell>
+        <mxCell id="7uPkXAtsU5es1uQ-42I1-20" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="DataBase" vertex="1">
+          <mxGeometry height="30" width="60" x="14" y="690" as="geometry" />
+        </mxCell>
+        <mxCell id="7uPkXAtsU5es1uQ-42I1-21" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="Presentation" vertex="1">
+          <mxGeometry height="30" width="60" x="25" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="7uPkXAtsU5es1uQ-42I1-22" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="Service" vertex="1">
+          <mxGeometry height="30" width="60" x="10" y="250" as="geometry" />
+        </mxCell>
+        <mxCell id="7uPkXAtsU5es1uQ-42I1-23" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="Data access" vertex="1">
+          <mxGeometry height="30" width="90" x="5" y="490" as="geometry" />
+        </mxCell>
+        <mxCell id="Vgv-YgMyLQQIi48OTteQ-1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="&lt;div&gt;DataBase&lt;/div&gt;" vertex="1">
+          <mxGeometry height="60" width="140" x="320" y="730" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
