@@ -10,17 +10,17 @@ DROP TABLE IF EXISTS audit_log, payment_transaction, student_debt, student_waive
 SET FOREIGN_KEY_CHECKS = 1;
 
 CREATE TABLE account (
-    account_id          BIGINT AUTO_INCREMENT PRIMARY KEY,
-    username            VARCHAR(50)  NOT NULL UNIQUE,
-    password_hash       VARCHAR(255) NOT NULL,
-    full_name           VARCHAR(100) NOT NULL,
-    email               VARCHAR(100) NOT NULL UNIQUE,
-    phone_number        VARCHAR(15),
-    status              ENUM('ACTIVE','LOCKED') NOT NULL DEFAULT 'ACTIVE',
-    failed_attempts     TINYINT UNSIGNED NOT NULL DEFAULT 0,
+    account_id           BIGINT AUTO_INCREMENT PRIMARY KEY,
+    username             VARCHAR(50)  NOT NULL UNIQUE,
+    password_hash        VARCHAR(255) NOT NULL,
+    full_name            VARCHAR(100) NOT NULL,
+    email                VARCHAR(100) NOT NULL UNIQUE,
+    phone_number         VARCHAR(15),
+    status               ENUM('ACTIVE','LOCKED') NOT NULL DEFAULT 'ACTIVE',
+    failed_attempts      TINYINT UNSIGNED NOT NULL DEFAULT 0,
     must_change_password TINYINT(1) NOT NULL DEFAULT 1,
-    created_at          DATETIME NOT NULL,
-    last_login_at       DATETIME NULL
+    created_at           DATETIME NOT NULL,
+    last_login_at        DATETIME NULL
 ) ENGINE=InnoDB;
 
 CREATE TABLE role (
@@ -134,7 +134,7 @@ CREATE TABLE semester (
 ) ENGINE=InnoDB;
 
 CREATE TABLE course_section (
-    course_section_id VARCHAR(15) PRIMARY KEY,
+    course_section_id VARCHAR(25) PRIMARY KEY,
     subject_id        VARCHAR(10) NOT NULL,
     semester_id       VARCHAR(10) NOT NULL,
     section_no        TINYINT UNSIGNED NOT NULL,
@@ -159,7 +159,7 @@ CREATE TABLE course_section (
 CREATE TABLE course_registration (
     registration_id   BIGINT AUTO_INCREMENT PRIMARY KEY,
     student_id        VARCHAR(12) NOT NULL,
-    course_section_id VARCHAR(15) NOT NULL,
+    course_section_id VARCHAR(25) NOT NULL,
     registration_date DATETIME NOT NULL,
     status            ENUM('PENDING','SUCCESSFUL','CANCELLED') NOT NULL,
     cancelled_at      DATETIME NULL,
