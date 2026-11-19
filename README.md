@@ -24,3 +24,28 @@ Lúc nạp file dữ liệu mẫu (`seed`) vào thì gặp ngay lỗi đầu ti�
 - **Lỗi gặp phải:** `Error Code: 1406. Data too long for column 'course_section_id'` — do mã lớp học phần mẫu mình đặt là `INT101-2026-2-01` dài **16 ký tự**, trong khi lúc đầu khai báo cột này chỉ có `VARCHAR(15)` (bị thiếu đúng 1 ký tự).
 - **Cách fix:** Nới rộng cột `course_section_id` từ `VARCHAR(15)` lên `VARCHAR(25)` ở cả 2 bảng `course_section` và `course_registration` để đồng bộ khóa chính và khóa ngoại.
 - **Kết quả:** Đã chạy lại mượt mà đủ 22 bảng, test thử các câu lệnh kiểm tra cột tự tính (`final_score`, `remaining_debt`) cùng các ràng buộc `CHECK` / `FOREIGN KEY` đều hoạt động ổn định.
+
+---
+
+## 19/11/2026 — Hoàn thiện các hàm tiện ích (Utils)
+
+Hôm nay mình dành thời gian dọn dẹp và viết nốt các hàm dùng chung, gom hết vào thư mục `app/utils/` theo đúng cấu trúc dự án. Nhìn chung thư mục này gồm các file xử lý chính: `security.py`, `excel_handler.py`, `export_handler.py`, `seed_passwords.py` và file kết nối DB `database.py`. 
+
+### 1. Bảo mật & Xác thực (`security.py` & `seed_passwords.py`)
+- **Băm mật khẩu:** Dùng `bcrypt` với `salt` tự động và cost >= 12 (NFR-SE-03). Tuyệt đối không lưu hay log mật khẩu gốc.
+- **Validate dữ liệu:** Viết thêm các hàm kiểm tra mật khẩu (độ dài), định dạng email bằng `re`, và số điện thoại (tùy chọn, nếu có thì từ 8-15 số).
+- **Script nạp pass mẫu:** Vì mật khẩu trong DB phải là chuỗi hash, mình viết hẳn file `seed_passwords.py`. Chạy lệnh `python -m app.utils.seed_passwords` là nó tự động băm các pass mặc định (`Admin@123`, `123456`) và update vào DB cho các tài khoản mẫu, rất tiện lúc test.
+
+### 2. Xử lý Excel (`excel_handler.py`)
+- **Tạo file mẫu (UC05):** Viết hàm `build_student_template` dùng `openpyxl` để sinh ra file Excel mẫu với đúng 8 cột quy định, kèm 1 dòng dữ liệu ví dụ cho dễ hiểu.
+- **Đọc file & Bắt lỗi (UC05.3):** Hàm `read_student_rows` xử lý khá nhiều edge cases: chặn file quá dung lượng (`IMPORT_MAX_FILE_MB`), chặn quá số dòng (`IMPORT_MAX_ROWS`), báo lỗi nếu thiếu cột bắt buộc, format lại ngày tháng (`%Y-%m-%d`), và tự động bỏ qua các dòng trống hoàn toàn.
+- **Xuất báo cáo lỗi:** Viết thêm `build_error_report` để xuất ra file Excel gồm các cột `row`, `student_id`, `error` nhằm trả về cho người dùng biết dòng nào bị lỗi khi import.
+
+### 3. Xuất bản in (`export_handler.py`)
+Thay vì phải cài thêm thư viện tạo PDF nặng nề, mình chọn cách render ra **HTML** rồi dùng JS `window.print()` để gọi hộp thoại in của trình duyệt (người dùng có thể chọn Save as PDF). 
+- Tận dụng `html.escape` để chống lỗi XSS cơ bản khi in dữ liệu do người dùng nhập.
+- **In thời khóa biểu (UC12) & Bảng điểm (UC13):** Render ra bảng HTML, kèm CSS cơ bản cho dễ nhìn.
+- **In biên lai (UC16):** Có thêm cờ `is_copy` để đánh dấu chữ **COPY** nếu người dùng in lại biên lai (không phải bản gốc).
+
+### Kết quả
+Toàn bộ các module utils đã được nối vào `app/utils/` trên nhánh code hiện tại. Code chạy ổn định, không vướng lỗi import vòng (circular import) nào. Sẵn sàng cho việc viết các route gọi API ở `web` hoặc `gui` vào các ngày tới.
