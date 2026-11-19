@@ -66,3 +66,11 @@ Thay vì phải cài thêm thư viện tạo PDF nặng nề, mình chọn cách
 
 ### Kết quả
 File `config.py` và toàn bộ các module utils đã được nối vào `app/` trên nhánh code hiện tại. Code chạy ổn định, không vướng lỗi import vòng (circular import) nào. Sẵn sàng cho việc viết các route gọi API ở `web` hoặc `gui` vào các ngày tới.
+
+## 3. Xây dựng tầng Model (Data Classes)
+
+Định nghĩa các thực thể (Entities) cho hệ thống. Thay vì dùng các ORM cồng kềnh như SQLAlchemy, mình sử dụng **`dataclasses`** có sẵn trong Python để biểu diễn dữ liệu. Cách làm này giúp code gọn nhẹ, có Type Hinting rõ ràng và cực kỳ dễ dàng mapping từ kết quả query MySQL sang Object. Toàn bộ được đặt trong thư mục `models/`.
+
+**Các file Model đã bổ sung:**
+- Chia nhỏ theo cụm chức năng: `user.py`, `student.py`, `lecturer.py` (người dùng); `academic.py` (Khoa/Ngành/Môn học); `course.py` (Lớp/Điểm); `finance.py` (Học phí); `audit_log.py`.
+- File `enums.py` gom các hằng số trạng thái (như `STUDYING`, `ACTIVE`...) để tránh dùng string rải rác trong code.
