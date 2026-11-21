@@ -74,3 +74,62 @@ File `config.py` và toàn bộ các module utils đã được nối vào `app/
 **Các file Model đã bổ sung:**
 - Chia nhỏ theo cụm chức năng: `user.py`, `student.py`, `lecturer.py` (người dùng); `academic.py` (Khoa/Ngành/Môn học); `course.py` (Lớp/Điểm); `finance.py` (Học phí); `audit_log.py`.
 - File `enums.py` gom các hằng số trạng thái (như `STUDYING`, `ACTIVE`...) để tránh dùng string rải rác trong code.
+
+## 21/11/2026 — Hoàn thiện tầng Repository & Service
+
+Hôm nay mình làm hai tầng lõi của hệ thống: **Repository** (chỉ chứa SQL, không dính nghiệp vụ — đúng SRS 2.9) và **Service** (nơi xử lý quy tắc nghiệp vụ, phân quyền, ghi audit). Cả hai đều đặt trong `app/` theo đúng cấu trúc ban đầu.
+
+---
+
+### 1. Tầng Repository (`app/repositories/`)
+
+Mình viết 9 file, mỗi file phụ trách một cụm bảng. **Nguyên tắc chung:** chỉ chứa câu lệnh SQL, không xử lý logic nghiệp vụ, để Service gọi lại.
+
+* **`base_repo.py`**: Lớp cơ sở giữ kết nối DB.
+* **`account_repo.py`**: Bảng `account`, `role`, `account_role`, `admin` — tìm/khóa tài khoản, reset mật khẩu, gán vai trò, đếm admin đang `ACTIVE`.
+* **`audit_repo.py`**: `audit_log` chỉ `INSERT` + `SELECT` (append-only, đúng BR-13 / NFR-SE-08).
+* **`catalog_repo.py`**: Khoa, ngành, lớp hành chính, môn học, tiên quyết, chương trình, học kỳ (UC07).
+* **`course_repo.py`**: `course_section` — mở lớp, kiểm tra trùng phòng/GV, có `SELECT ... FOR UPDATE` để khóa dòng khi đăng ký (NFR-PE-04).
+* **`enroll_repo.py`**: `course_registration` — đăng ký/hủy/đăng ký lại, tổng tín chỉ, kiểm tra tiên quyết đã đạt (BR-07), danh sách lớp cho GV.
+* **`grade_repo.py`**: `grade` — nhập/sửa điểm có khóa lạc quan bằng cột `version` (NFR-PE-06), xem điểm đã `PUBLISHED` (BR-10).
+* **`payment_repo.py`**: Bảng giá, miễn giảm, công nợ, giao dịch, sổ cái theo `debt_id`.
+* **`user_repo.py`**: Hồ sơ sinh viên + giảng viên (UC05, UC06), tìm kiếm có phân trang, kiểm tra ràng buộc xóa mềm (BR-02).
+
+---
+
+### 2. Tầng Service (`app/services/`)
+
+Đây là phần mình viết nhiều nhất trong ngày. Mỗi Service đều kiểm tra phân quyền ở server trước khi làm bất cứ thứ gì (NFR-SE-02), và ghi audit log cho mọi thao tác ghi quan trọng.
+
+* **`__init__.py`**: Gom `ServiceError`, `PermissionDenied`, hàm `require_role`, `validation_error` báo lỗi theo từng trường, `generate_temp_password`, `page_info` (20 dòng/trang — NFR-US-05), cùng `parse_date` / `parse_datetime`.
+* **`auth_service.py`**: UC01–UC04 — đăng nhập (rate-limit 10 req/phút/IP, khóa sau 5 lần sai — NFR-SE-06), đổi mật khẩu, tạo/khóa/mở/reset tài khoản, gán vai trò. Có chặn không cho khóa `SYSTEM_ADMIN` cuối cùng (BR-01).
+* **`catalog_service.py`**: UC07 — CRUD khoa/ngành/lớp/môn, kiểm tra phụ thuộc trước khi ngừng hoạt động, chống vòng lặp tiên quyết bằng DFS, quản lý học kỳ.
+* **`enroll_service.py`**: UC08–UC13 — mở lớp, phân công GV, và phần chính là **chuỗi 9 bước đăng ký trong một transaction** (thời gian, trạng thái, tiên quyết, trùng lịch, nợ quá hạn, tín chỉ, khóa dòng lớp, đếm `SUCCESSFUL`, tính lại học phí). Ngoài ra có hủy môn, xem TKB, xem điểm `PUBLISHED`.
+* **`fee_service.py`**: UC14–UC19 — bảng giá, chính sách miễn giảm, thu tiền (CASH/CK), xác nhận chuyển khoản `PENDING` → `CONFIRMED`, in biên lai (đánh dấu bản sao), danh sách nợ quá hạn, hoàn tiền/điều chỉnh (BR-12: giao dịch mới liên kết giao dịch gốc, không sửa/xóa). Công thức tính lại học phí (BR-11) nằm trong cùng transaction với đăng ký/hủy.
+* **`grade_service.py`**: UC20–UC22 — GV chỉ thao tác lớp được phân công (BR-09), nhập điểm có ghi lý do khi sửa + audit cũ/mới, khóa/công bố/mở khóa bảng điểm theo BR-10.
+* **`user_service.py`**: UC05–UC06 — mới bắt đầu, đang triển khai phần import Excel và validate hồ sơ SV/GV.
+
+---
+
+### 3. Các quy tắc nghiệp vụ đã bám sát
+
+Trong lúc viết Service, mình đối chiếu lại từng BR để không bỏ sót:
+
+* **BR-01**: Một hồ sơ – một tài khoản, ít nhất một vai trò; chặn xóa `SYSTEM_ADMIN` cuối cùng.
+* **BR-02**: Dữ liệu lịch sử chỉ xóa mềm.
+* **BR-03 / BR-04**: Đăng ký/hủy môn phải đúng thời gian, đúng trạng thái, chưa có điểm.
+* **BR-05 / NFR-PE-04**: `FOR UPDATE` khi đăng ký để tránh tranh chấp ghế.
+* **BR-06 / NFR-PE-05**: Chặn trùng đăng ký bằng `UNIQUE` + kiểm tra trùng lịch.
+* **BR-07**: Kiểm tra đủ môn tiên quyết.
+* **BR-08**: Chặn đăng ký khi nợ quá hạn vượt ngưỡng.
+* **BR-09 / BR-10**: GV chỉ sửa lớp được phân công, SV chỉ thấy điểm `PUBLISHED`.
+* **BR-11**: Học phí tính lại trong cùng transaction với đăng ký/hủy.
+* **BR-12 / BR-13**: Hoàn tiền là giao dịch mới; audit log append-only.
+
+---
+
+### Kết quả & Bước tiếp theo
+
+Tầng Repository đã xong, phần lớn tầng Service cũng đã nối vào `app/` trên nhánh hiện tại. Code chạy ổn định, không có circular import. `user_service.py` còn dang dở phần import Excel và sẽ hoàn thiện vào ngày tới. 
+
+**Bước tiếp theo:** Viết unit test cho `enroll_service` (chuỗi 9 bước UC10) và `fee_service` (công thức BR-11, hoàn tiền BR-12) trước khi nối lên tầng Controller.
