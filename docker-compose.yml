@@ -1,0 +1,40 @@
+services:
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: sms
+      MYSQL_USER: sms_user
+      MYSQL_PASSWORD: sms_pass
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    ports:
+      - "3306:3306"          # de ban Desktop (main.py / .exe) tren may host cung ket noi duoc
+    volumes:
+      - ./database:/docker-entrypoint-initdb.d:ro   # lan dau: schema.sql roi seed.sql
+      - dbdata:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-proot"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    restart: unless-stopped
+
+  web:
+    build: .
+    environment:
+      DB_HOST: db
+      DB_PORT: "3306"
+      DB_USER: sms_user
+      DB_PASSWORD: sms_pass
+      DB_NAME: sms
+      SECRET_KEY: change-me-in-production
+      SESSION_COOKIE_SECURE: "0"     # dat "1" khi deploy sau HTTPS
+    ports:
+      - "5000:5000"
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  dbdata:

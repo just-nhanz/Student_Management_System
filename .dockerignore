@@ -1,0 +1,13 @@
+.git
+.github
+.venv
+build
+dist
+logs
+tests
+__pycache__
+*.pyc
+*.log
+.env
+build_exe.bat
+StudentManagementSystem.spec
