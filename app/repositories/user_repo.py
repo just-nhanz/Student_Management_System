@@ -121,3 +121,4 @@ class UserRepo(BaseRepo):
         row = self.db.fetch_one(
             "SELECT COUNT(*) AS total FROM course_section WHERE lecturer_id = %s", (lecturer_id,))
         return row["total"] > 0
+        
