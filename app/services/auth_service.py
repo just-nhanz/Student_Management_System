@@ -231,3 +231,4 @@ class AuthService:
             AuditRepo(db).add(admin["account_id"], "ROLE_CHANGE", "account", str(account_id),
                               "old=%s new=%s" % (",".join(old_roles), ",".join(role_names)), ip)
         return True
+
