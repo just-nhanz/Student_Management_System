@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Curriculum catalogue</h2>
+
+<h3>Faculties</h3>
+<table><tr><th>ID</th><th>Name</th><th>Status</th><th></th></tr>
+{% for f in data.faculties %}<tr><td>{{ f.faculty_id }}</td><td>{{ f.faculty_name }}</td><td>{{ f.status }}</td>
+<td><form method="post" class="inline" data-confirm="Deactivate this faculty?"><input type="hidden" name="csrf_token" value="{{ csrf_token }}"><input type="hidden" name="faculty_id" value="{{ f.faculty_id }}"><button name="action" value="delete_faculty">Delete</button></form></td></tr>{% endfor %}</table>
+<form method="post" class="toolbar"><input type="hidden" name="csrf_token" value="{{ csrf_token }}"><input type="hidden" name="action" value="add_faculty">
+  <label>ID <input name="faculty_id" required></label><label>Name <input name="faculty_name" required></label><label>Description <input name="description"></label><button>Add faculty</button></form>
+
+<h3>Majors</h3>
+<table><tr><th>ID</th><th>Name</th><th>Faculty</th><th>Status</th><th></th></tr>
+{% for m in data.majors %}<tr><td>{{ m.major_id }}</td><td>{{ m.major_name }}</td><td>{{ m.faculty_id }}</td><td>{{ m.status }}</td>
+<td><form method="post" class="inline" data-confirm="Deactivate this major?"><input type="hidden" name="csrf_token" value="{{ csrf_token }}"><input type="hidden" name="major_id" value="{{ m.major_id }}"><button name="action" value="delete_major">Delete</button></form></td></tr>{% endfor %}</table>
+<form method="post" class="toolbar"><input type="hidden" name="csrf_token" value="{{ csrf_token }}"><input type="hidden" name="action" value="add_major">
+  <label>ID <input name="major_id" required></label><label>Name <input name="major_name" required></label>
+  <label>Faculty <select name="faculty_id">{% for f in data.faculties %}<option>{{ f.faculty_id }}</option>{% endfor %}</select></label><button>Add major</button></form>
+
+<h3>Administrative classes</h3>
+<table><tr><th>ID</th><th>Name</th><th>Major</th><th>Year</th><th>Status</th><th></th></tr>
+{% for c in data.classes %}<tr><td>{{ c.class_id }}</td><td>{{ c.class_name }}</td><td>{{ c.major_id }}</td><td>{{ c.academic_year }}</td><td>{{ c.status }}</td>
+<td><form method="post" class="inline" data-confirm="Deactivate this class?"><input type="hidden" name="csrf_token" value="{{ csrf_token }}"><input type="hidden" name="class_id" value="{{ c.class_id }}"><button name="action" value="delete_class">Delete</button></form></td></tr>{% endfor %}</table>
+<form method="post" class="toolbar"><input type="hidden" name="csrf_token" value="{{ csrf_token }}"><input type="hidden" name="action" value="add_class">
+  <label>ID <input name="class_id" required></label><label>Name <input name="class_name" required></label>
+  <label>Major <select name="major_id">{% for m in data.majors %}<option>{{ m.major_id }}</option>{% endfor %}</select></label>
+  <label>Year <input name="academic_year" required></label><button>Add class</button></form>
+
+<h3>Subjects</h3>
+<table><tr><th>ID</th><th>Name</th><th>Credits</th><th>Faculty</th><th>Status</th><th></th></tr>
+{% for s in data.subjects %}<tr><td>{{ s.subject_id }}</td><td>{{ s.subject_name }}</td><td>{{ s.credits }}</td><td>{{ s.faculty_id }}</td><td>{{ s.status }}</td>
+<td><form method="post" class="inline" data-confirm="Mark this subject as discontinued?"><input type="hidden" name="csrf_token" value="{{ csrf_token }}"><input type="hidden" name="subject_id" value="{{ s.subject_id }}"><button name="action" value="discontinue_subject">Discontinue</button></form></td></tr>{% endfor %}</table>
+<form method="post" class="toolbar"><input type="hidden" name="csrf_token" value="{{ csrf_token }}"><input type="hidden" name="action" value="add_subject">
+  <label>ID <input name="subject_id" required></label><label>Name <input name="subject_name" required></label><label>Credits <input name="credits" type="number" required></label>
+  <label>Faculty <select name="faculty_id">{% for f in data.faculties %}<option>{{ f.faculty_id }}</option>{% endfor %}</select></label><button>Add subject</button></form>
+<form method="post" class="toolbar"><input type="hidden" name="csrf_token" value="{{ csrf_token }}"><input type="hidden" name="action" value="set_prerequisites">
+  <label>Subject <input name="subject_id" required></label><label>Prerequisites (comma separated) <input name="prerequisites"></label><button>Save prerequisites</button></form>
+<form method="post" class="toolbar"><input type="hidden" name="csrf_token" value="{{ csrf_token }}"><input type="hidden" name="action" value="set_curriculum">
+  <label>Major <input name="major_id" required></label><label>Subject <input name="subject_id" required></label>
+  <label>Type <select name="is_required"><option value="1">Required</option><option value="0">Elective</option></select></label>
+  <label>Recommended semester <input name="recommended_semester" type="number"></label><button>Save curriculum</button></form>
+
+<h3>Semesters</h3>
+<table><tr><th>ID</th><th>Name</th><th>Start</th><th>End</th><th>Registration</th><th>Cancel deadline</th><th>Max credits</th></tr>
+{% for s in data.semesters %}<tr><td>{{ s.semester_id }}</td><td>{{ s.semester_name }}</td><td>{{ s.start_date }}</td><td>{{ s.end_date }}</td><td>{{ s.reg_start }} - {{ s.reg_end }}</td><td>{{ s.cancel_deadline }}</td><td>{{ s.max_credits }}</td></tr>{% endfor %}</table>
+<form method="post" class="card"><input type="hidden" name="csrf_token" value="{{ csrf_token }}"><input type="hidden" name="action" value="add_semester">
+  <label>ID <input name="semester_id" required></label><label>Name <input name="semester_name" required></label>
+  <label>Start date <input type="date" name="start_date" required></label><label>End date <input type="date" name="end_date" required></label>
+  <label>Registration start <input name="reg_start" placeholder="YYYY-MM-DD HH:MM" required></label><label>Registration end <input name="reg_end" placeholder="YYYY-MM-DD HH:MM" required></label>
+  <label>Cancel deadline <input name="cancel_deadline" placeholder="YYYY-MM-DD HH:MM" required></label><label>Max credits <input name="max_credits" type="number" value="24"></label>
+  <button>Add semester</button></form>
+{% endblock %}
